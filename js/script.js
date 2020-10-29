@@ -1,16 +1,3 @@
-/* Задания на урок:
-
-1) Удалить все рекламные блоки со страницы (правая часть сайта)
-
-2) Изменить жанр фильма, поменять "комедия" на "драма"
-
-3) Изменить задний фон постера с фильмом на изображение "bg.jpg". Оно лежит в папке img.
-Реализовать только при помощи JS
-
-4) Список фильмов на странице сформировать на основании данных из этого JS файла.
-Отсортировать их по алфавиту 
-
-5) Добавить нумерацию выведенных фильмов */
 
 'use strict';
 
@@ -27,8 +14,12 @@ const movieDB = {
 const adv = document.querySelectorAll('.promo__adv img'),
       poster = document.querySelector('.promo__bg'),
       genre = poster.querySelector('.promo__genre'),
-      movieList = document.querySelector('.promo__interactive-list');
-      
+      movieList = document.querySelector('.promo__interactive-list'),
+      btnConfirm = document.querySelector('button'),
+      inputAdd = document.querySelector('.adding__input'),
+      inputCheck = document.querySelectorAll('input');
+
+
 
 adv.forEach(item => {
     item.remove();
@@ -42,26 +33,43 @@ movieList.innerHTML = '';
 
 movieDB.movies.sort();
 
+let iLast;
 movieDB.movies.forEach((film, i) => {
     movieList.innerHTML += `
         <li class="promo__interactive-item">${i + 1} ${film}
         <div class="delete"></div>
         </li>
     `;
+    iLast = i + 1;
 });
 
-// const divLi = [],
-//       divDelete = [];
-// for (let i = 0; i < moviesArray.length; i++) {
-//     divLi[i] = document.createElement('li');
-//     divDelete[i] = document.createElement('div');
-//     divLi[i].classList.add('promo__interactive-item');
-//     divDelete[i].classList.add('delete');
-//     divLi[i].textContent = `${moviesArray[i]}`;
-//     promoInteractiveItem[i].replaceWith(divLi[i]);
-//     divLi[i].insertAdjacentElement('beforeend', divDelete[i]);
-// }
 
-// console.dir(promoInteractiveList);
-// promoInteractiveList.style.listStyle = "circle";
+
+btnConfirm.addEventListener('click', (event) => {
+    event.preventDefault();
+    if (inputAdd.value != '') {
+        let filmNew = inputAdd.value;
+            if (filmNew.length >21) {
+                filmNew = filmNew.slice(0, 21) + '...';
+            }
+            movieDB.movies.push(filmNew);
+            movieList.innerHTML += `
+                <li class="promo__interactive-item">${iLast + 1} ${filmNew}
+                <div class="delete"></div>
+                </li>
+            `;
+            iLast++;
+            inputAdd.value = '';
+    } else {
+        alert('Введите фильм!');
+    }
+    
+});
+
+
+inputCheck[2].addEventListener('click', () => {
+    if (inputCheck[2].checked == true) {
+        console.log('Добавляем любимый фильм');
+    }
+});
 
